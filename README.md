@@ -6,6 +6,8 @@ The starter code in this repository allows a user to purchase a license for a pa
 
 This rudimentary example is intended to showcase the core parts of monetising an app with Salable.
 
+<img width="383" alt="Salable and Miro starter app demonstration" src="https://github.com/Salable/salable-miro-starter/assets/8593744/ebffca1c-40dd-48fc-8670-d41d844f6e32">
+
 If you want to learn more about Salable, read the [Quick Start Guide](https://docs.salable.app/docs/quick-start-guide) and [The Salable Way](https://docs.salable.app/docs/the-salable-way).
 
 ## Setup
