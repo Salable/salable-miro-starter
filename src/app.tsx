@@ -19,18 +19,18 @@ const App: React.FC = () => {
 
   const apiKey = import.meta.env.VITE_SALABLE_API_KEY as string;
 
-  const checkUserLicense = async (board: BoardInfo) => {
+  const checkUserLicense = async (teamId: string) => {
     const { hasCapability } = await getGrantee({
       apiKey,
       productUuid: import.meta.env.VITE_SALABLE_PRODUCT_UUID as string,
-      granteeId: board.id,
+      granteeId: teamId,
     });
 
     setCanAddSticky(hasCapability("Create"));
     return hasCapability("pro");
   };
 
-  const fetchCheckoutLink = async (boardInfo: BoardInfo) => {
+  const fetchCheckoutLink = async (boardInfo: BoardInfo, teamId: string) => {
     if (checkoutLink) return;
 
     const boardUrl = `https://miro.com/app/board/${boardInfo.id}/`;
@@ -40,21 +40,35 @@ const App: React.FC = () => {
       planUuid: import.meta.env.VITE_SALABLE_PLAN_UUID as string,
       // The grantee can be anything, in this case we've opted to have the
       // license belong to the board.
-      granteeId: boardInfo.id,
-      member: boardInfo.id,
+      granteeId: teamId,
+      member: teamId,
       successUrl: boardUrl,
       cancelUrl: boardUrl,
     });
 
     setCheckoutLink(url);
-    await checkUserLicense(boardInfo);
+    console.log({ teamId });
+    await checkUserLicense(teamId);
   };
 
   async function setup() {
+    const options = {
+      method: "GET",
+      headers: {
+        accept: "application/json",
+        authorization: `Bearer ${import.meta.env.VITE_MIRO_ACCESS_TOKEN}`,
+      },
+    };
+
+    const response = await fetch(
+      "https://api.miro.com/v1/oauth-token",
+      options
+    );
+    const jsonData = await response.json();
     const boardInfo = await miro.board.getInfo();
-    const isProMember = await checkUserLicense(boardInfo);
+    const isProMember = await checkUserLicense(jsonData.team.id);
     if (!isProMember) {
-      await fetchCheckoutLink(boardInfo);
+      await fetchCheckoutLink(boardInfo, jsonData.team.id);
     }
   }
 
