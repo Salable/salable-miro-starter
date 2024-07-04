@@ -16,5 +16,6 @@ If you want to learn more about Salable, read the [Quick Start Guide](https://do
 2. `cp .env.example .env` and fill in the variables with values from your
    Salable product.
 3. `npm start`
+4. You need a `pro` and `Create` capability set up in your Salable product.
 
 If you need any more detailed instructions on setting up a new Miro app, read the [Miro: Build Your First Hello World App](https://developers.miro.com/docs/build-your-first-hello-world-app) guide.
